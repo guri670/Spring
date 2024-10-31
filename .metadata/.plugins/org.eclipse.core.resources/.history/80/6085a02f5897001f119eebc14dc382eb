@@ -1,0 +1,7 @@
+package com.myaws.myapp.service;
+
+public class Test {
+	
+	private String name="스프링 공부";
+	
+}
