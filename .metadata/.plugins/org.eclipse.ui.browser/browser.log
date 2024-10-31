@@ -1,0 +1,17 @@
+
+10월 31, 2024 12:16:28.275 NEW SESSION
+10월 31, 2024 12:16:28.276 Created TensorFlow Lite XNNPACK delegate for CPU.
+10월 31, 2024 12:25:36.193 [1596:9024:1031/122536.192:ERROR:CONSOLE(1)] "Unknown VE context: language-mismatch    at new He (devtools://devtools/bundled/devtools-frontend/front_end/ui/legacy/legacy.js:1:98356)
+10월 31, 2024 12:25:36.193     at devtools://devtools/bundled/devtools-frontend/front_end/ui/legacy/legacy.js:1:191793
+10월 31, 2024 12:25:36.193     at new oi (devtools://devtools/bundled/devtools-frontend/front_end/ui/legacy/legacy.js:1:192189)
+10월 31, 2024 12:25:36.193     at oi.instance (devtools://devtools/bundled/devtools-frontend/front_end/ui/legacy/legacy.js:1:192311)
+10월 31, 2024 12:25:36.193     at O.presentUI (devtools://devtools/bundled/devtools-frontend/front_end/panels/emulation/emulation.js:1:58454)
+10월 31, 2024 12:25:36.195     at #I (devtools://devtools/bundled/devtools-frontend/front_end/entrypoints/main/main.js:1:17314)
+10월 31, 2024 12:25:36.196     at #x (devtools://devtools/bundled/devtools-frontend/front_end/entrypoints/main/main.js:1:17109)", source: devtools://devtools/bundled/devtools-frontend/front_end/ui/visual_logging/visual_logging.js (1)
+10월 31, 2024 14:24:47.309 Created TensorFlow Lite XNNPACK delegate for CPU.
+10월 31, 2024 14:26:11.660 Created TensorFlow Lite XNNPACK delegate for CPU.
+10월 31, 2024 14:43:46.995 Created TensorFlow Lite XNNPACK delegate for CPU.
+10월 31, 2024 15:04:37.329 Created TensorFlow Lite XNNPACK delegate for CPU.
+10월 31, 2024 15:04:54.587 Created TensorFlow Lite XNNPACK delegate for CPU.
+10월 31, 2024 15:06:33.38 Created TensorFlow Lite XNNPACK delegate for CPU.
+10월 31, 2024 15:08:58.897 Created TensorFlow Lite XNNPACK delegate for CPU.
