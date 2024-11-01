@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Rename compilation unit &apos;com.myaws.myapp.service.memberServiceImpl.java&apos; to &apos;MemberServiceImpl.java&apos;&#x0D;&#x0A;- Original project: &apos;spring_awshg&apos;&#x0D;&#x0A;- Original element: &apos;com.myaws.myapp.service.memberServiceImpl.java&apos;&#x0D;&#x0A;- Renamed element: &apos;com.myaws.myapp.service.MemberServiceImpl.java&apos;" description="Rename compilation unit &apos;memberServiceImpl.java&apos;" flags="2" id="org.eclipse.jdt.ui.rename.compilationunit" input="/src\/main\/java=/optional=/true=/=/maven.pomderived=/true=/&lt;com.myaws.myapp.service{memberServiceImpl.java" name="MemberServiceImpl.java" references="false" stamp="1730442138563" version="1.0"/>
+</session>

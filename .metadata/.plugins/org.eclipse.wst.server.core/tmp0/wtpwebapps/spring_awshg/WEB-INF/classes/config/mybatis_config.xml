@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd">
+ 
+<configuration> 
+<typeAliases>
+<!-- typeAliases -> 별칭 mv라는 별칭 -->
+ <typeAlias alias="mv" type="com.myaws.myapp.domain.MemberVo"/>
+ <!-- 경로안 domain 패키지 안에 Vo를 넣으면된다. -->
+
+</typeAliases>
+</configuration>

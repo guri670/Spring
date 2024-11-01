@@ -26,10 +26,6 @@ function check(){
 		alert("아이디를 입력해주세요");
 		fm.memberid.focus();
 		return;
-	}else if (fm.btn.value =="N"){
-		alert("아이디 중복체크를 해주세요")
-		fm.memberid.focus();
-		return;
 	}else if (fm.memberpwd.value ==""){		
 		alert("비밀번호를 입력해주세요");
 		fm.memberpwd.focus();
@@ -68,6 +64,10 @@ function check(){
 		alert("취미를 한개 이상 선택해주세요");	
 		return;
 	}	
+	/*}else if (fm.btn.value =="N"){
+		alert("아이디 중복체크를 해주세요")
+		fm.memberid.focus();
+		return;*/
 	
 	var ans = confirm("저장하시겠습니까?");
 	

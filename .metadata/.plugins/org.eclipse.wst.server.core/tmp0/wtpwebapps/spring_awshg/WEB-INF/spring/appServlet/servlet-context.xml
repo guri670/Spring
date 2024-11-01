@@ -35,7 +35,7 @@
 	<!-- 파일 업로드할때 위치 지정 -->
 
 	
-	<context:component-scan base-package="com.myaws.myapp" />
+	<context:component-scan base-package="com.myaws.myapp.controller" />
 	<!-- component -> 객체 -->
 	
 	

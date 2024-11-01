@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.myaws.myapp.persistance.MemberMapper">
+<!-- 쿼리작성 persistance/Membermapper에 들어감 이름이 같게-->
+ 
+<insert id ="memberInsert" parameterType ="mv">
+insert into member(memberid, memberpwd, membername, membergender, memberbirth, memberaddr, memberphone, memberemail, memberhobby) 
+values(#{memberid}, #{memberpwd}, #{membername}, #{membergender}, #{memberbirth}, #{memberaddr}, #{memberphone}, #{memberemail}, #{memberhobby}))
+</insert>
+
+
+</mapper>
+
+<!-- myabatis용 메서드를 지정해야한다 persistance패키지를 넣는다.-->
+<!-- persistance 안에 class가 아닌 interface를 넣는다. interface 안에는 메서드만 넣어두고 메서드 안에 실제 사용할 쿼리를 입력함 -->

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:jee="http://www.springframework.org/schema/jee"
+	xmlns:task="http://www.springframework.org/schema/task"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xsi:schemaLocation="http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee-4.3.xsd
+		http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task-4.3.xsd
+		http://www.springframework.org/schema/beans https://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.3.xsd
+		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-4.3.xsd">
+	
+	<!-- Root Context: defines shared resources visible to all other web components -->
+		
+	<!-- <bean id="tt" class="com.myaws.myapp.service.Test"> </bean> -->
+	
+	<bean id="db" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+	<property name="driverClassName" value="com.mysql.cj.jdbc.Driver"/>
+	<property name="url" value="jdbc:mysql://127.0.0.1:3306/aws0822@useSSL=false&amp;serverTimezone=UTC&amp;allowPublicKeyRetrieval=true"/>
+	<!-- 보안사용x(useSSL) 국제표준시(serverTimeZone) (allowPublicKeyRetrieval) -->
+	<property name="username" value="root"/>
+	<property name="password" value="1234"/>
+	<!-- DB연결 객체(dbconn) -->
+	</bean>
+	
+	<!-- bean등록 -->
+	<bean id="sqlSessionFactroy" class="org.mybatis.spring.SqlSessionFactoryBean">
+	<property name="dataSource" ref="db"/>
+	<!-- ref로 db bean 연결 -->
+	<property name="mapperLocations" value="classpath:mappers/*.xml"/>
+	<!-- mapper 쿼리를 담는곳 위치는 *.xml에 담는다 -->
+	<property name="configLocation" value="classpath:config/mybatis_config.xml"/>
+	<!-- mybatis 설정에 관한 파일을 담는다 -->
+	</bean>
+		
+	<bean id="sqlSession" class="org.mybatis.spring.SqlSessionTemplate">
+	<constructor-arg name="sqlSessionFactory" ref="sqlSessionFactroy"/>
+	<!-- sqlSessionFactory 공장에서 생성한 데이터를 사용하는 bean이다. 생성자를통해 sqlSessionFactory과 연동된다. -->
+	</bean>
+		
+</beans>

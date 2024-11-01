@@ -1,0 +1,6 @@
+package com.myaws.myapp.service;
+
+public interface MemberService {
+	
+	public int memberInsert(memberVo mv);
+}
