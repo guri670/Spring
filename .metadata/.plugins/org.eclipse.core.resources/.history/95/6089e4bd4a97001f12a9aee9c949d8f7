@@ -1,6 +1,0 @@
-package com.myaws.myapp.controller;
-
-@Controller
-public class MemberController {
-
-}

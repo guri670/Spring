@@ -4,9 +4,7 @@ import com.myaws.myapp.domain.MemberVo;
 
 public interface MemberMapper {
 
-	public int memberInsert(MemberVo mv); // mybatisìš© ë©”ì„œë“œ
-	
-	
-	
-	
+	public int memberInsert(MemberVo mv); // mybatis¿ë ¸Þ¼­µå
+	public int memberIdCheck(String memberId); 
+	public MemberVo memberLoginCheck(String memberId);
 }

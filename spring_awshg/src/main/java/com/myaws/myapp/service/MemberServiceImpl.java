@@ -1,11 +1,15 @@
 package com.myaws.myapp.service;
 
 import org.apache.ibatis.session.SqlSession;
+import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.myaws.myapp.domain.MemberVo;
 import com.myaws.myapp.persistance.MemberMapper;
+
+import netscape.javascript.JSObject;
 
 @Service
 public class MemberServiceImpl implements MemberService{
@@ -19,10 +23,22 @@ public class MemberServiceImpl implements MemberService{
 	
 	@Override
 	public int memberInsert(MemberVo mv) {
-		// mybatisÏôÄ Ïó∞Îèô
+		// mybatisøÕ ø¨µø
 		int value = mm.memberInsert(mv);
 		
 		return value;
 	}
 
+	@Override
+	public int memberIdCheck(String memberId) {
+			int value = mm.memberIdCheck(memberId);		
+		return value;
+	}
+
+	@Override
+	public MemberVo memberLoginCheck(String memberId) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }
+

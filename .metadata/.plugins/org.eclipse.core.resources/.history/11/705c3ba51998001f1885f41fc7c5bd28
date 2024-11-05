@@ -1,5 +1,0 @@
-package com.myaws.myapp.service;
-
-public class MemberServiceImpl implements MemberService{
-
-}

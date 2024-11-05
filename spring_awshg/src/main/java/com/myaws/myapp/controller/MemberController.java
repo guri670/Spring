@@ -1,59 +1,109 @@
 package com.myaws.myapp.controller;
 
+import org.json.simple.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.myaws.myapp.domain.MemberVo;
 import com.myaws.myapp.service.MemberService;
 
-
-@Controller // ì–´ë…¸í…Œì´ì…˜ìœ¼ë¡œ ìŠ¤í”„ë§ì—ê²Œ ê°ì²´ ìƒì„± ìš”ì²­
-@RequestMapping(value="/member/")
+@Controller // ¾î³ëÅ×ÀÌ¼ÇÀ¸·Î ½ºÇÁ¸µ¿¡°Ô °´Ã¼ »ý¼º ¿äÃ»
+@RequestMapping(value = "/member/")
 public class MemberController {
-	
+
 	private static final Logger logger = LoggerFactory.getLogger(MemberController.class);
-	
-//	@Autowired
-//	private Test tt;
-	
+
 	@Autowired
-	MemberService memberService;
-	
-	@RequestMapping(value="memberJoin.aws",method =RequestMethod.GET) // getë°©ì‹ìœ¼ë¡œ request
+	private MemberService memberService;
+
+	@Autowired(required = false)
+	private BCryptPasswordEncoder bCryptPasswordEncoder; // ~security.crypto.bcrypt.BCryptPasswordEncoder
+
+	@RequestMapping(value = "memberJoin.aws", method = RequestMethod.GET) // get¹æ½ÄÀ¸·Î request
 	public String memberJoin() {
-		logger.info("memberJoinë“¤ì–´ì˜´"); 
-		//logger.info("ttê°’ì€"+tt.test()); 
-		
+		logger.info("memberJoinµé¾î¿È");
+
 		return "WEB-INF/member/memberJoin";
 	}
-	
-	@RequestMapping(value="memberLogin.aws",method=RequestMethod.GET)
-	public String memberLogin() {
-		
-		return "WEB-INF/member/memberLogin";
-	}
-	
-	@RequestMapping(value="memberJoinAction.aws",method=RequestMethod.POST)
+
+	@RequestMapping(value = "memberJoinAction.aws", method = RequestMethod.POST)
 	public String memberJoinAction(MemberVo mv) {
-		logger.info("memberJoinActionë“¤ì–´ì˜´"); 
-		
+		logger.info("memberJoinActionµé¾î¿È");
+		logger.info("bCryptPasswordEncoder==> ");
+
+//	      // ³Ñ¾î¿Â ºñ¹Ð¹øÈ£¸¦ ºñ¹Ð¹øÈ£ ¾ÏÈ£È­ ½ÃÅ°±â
+		String memberpw_enc = bCryptPasswordEncoder.encode(mv.getMemberpwd());
+//	      // ¾ÏÈ£È­ ½ÃÅ² ºñ¹Ð¹øÈ£¸¦ ´Ù½Ã ³Ñ±â±â
+		mv.setMemberpwd(memberpw_enc);
+
+		// ºñ¹Ð¹øÈ£ ¾ÏÈ£È­ Ã³¸® ±â´É Ãß°¡(memberLoginAction ~ )
+
 		int value = memberService.memberInsert(mv);
-		logger.info("JAvalue : "+value);
-		
-		String path="";
-		if(value == 1) {
+		logger.info("JAvalue : " + value);
+
+		String path = "";
+		if (value == 1) {
 			path = "redirect:/";
-		} else if(value == 0) {
+		} else if (value == 0) {
 			path = "redirect:/member/memberJoin.aws";
 		}
-		
-		
-		
+
 		return path;
-	
+
+	}
+
+	@RequestMapping(value = "memberLogin.aws", method = RequestMethod.GET)
+	public String memberLogin() {
+
+		return "WEB-INF/member/memberLogin";
+	}
+
+	@RequestMapping(value = "memberLoginAction.aws", method = RequestMethod.GET)
+	public String memberLoginAction(@RequestParam("memberid") String memberid,
+			@RequestParam("memberPwd") String memberpwd) {
+		logger.info("memberJoinActionµé¾î¿È");
+
+		MemberVo mv = memberService.memberLoginCheck(memberid);
+		// ÀúÀåµÈ ºñ¹Ð¹øÈ£¸¦ °¡Á®¿Â´Ù.
+
+		String path = "";
+		if (mv != null) { // °´Ã¼°ªÀÌ nullÀÌ¸é
+			String reservedPwd = mv.getMemberpwd();
+			if (bCryptPasswordEncoder.matches(memberpwd, reservedPwd)) {
+				System.out.println("ºñ¹Ð¹øÈ£ ÀÏÄ¡");
+
+				path = "redirect:/";
+			} else {
+
+				path = "redirect:/member/memberLogin.aws";
+			}
+		} else {
+
+			path = "redirect:/member/memberLogin.aws";
+		}
+		// È¸¿øÁ¤º¸¸¦ Session¿¡ ´ã´Â´Ù.
+		// ·Î±×ÀÎ¿¡ ½ÇÆÐÇÏ¸é ·Î±×ÀÎÆäÀÌÁö·Î ÀÌµ¿, ·Î±×ÀÎÀÌ µÇ¸é ¸ÞÀÎÆäÀÌÁö·Î ÀÌµ¿
+
+		return path;
+	}
+
+	@ResponseBody // °á°ú°ª °´Ã¼·Î º¸³½´Ù
+	@RequestMapping(value = "memberIdCheck.aws", method = RequestMethod.POST)
+	public JSONObject memberIdCheck(@RequestParam("memberId") String memberId) {
+
+		// POJO¹æ½Ä
+		int cnt = memberService.memberIdCheck(memberId);
+		JSONObject obj = new JSONObject();
+		obj.put("cnt", cnt);
+
+		return obj;
+
 	}
 }

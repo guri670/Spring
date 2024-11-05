@@ -26,6 +26,10 @@ function check(){
 		alert("아이디를 입력해주세요");
 		fm.memberid.focus();
 		return;
+	}else if (fm.btn.value =="N"){
+		alert("아이디 중복체크를 해주세요")
+		fm.memberid.focus();
+		return;
 	}else if (fm.memberpwd.value ==""){		
 		alert("비밀번호를 입력해주세요");
 		fm.memberpwd.focus();
@@ -64,10 +68,6 @@ function check(){
 		alert("취미를 한개 이상 선택해주세요");	
 		return;
 	}	
-	/*}else if (fm.btn.value =="N"){
-		alert("아이디 중복체크를 해주세요")
-		fm.memberid.focus();
-		return;*/
 	
 	var ans = confirm("저장하시겠습니까?");
 	
@@ -119,7 +119,7 @@ function check(){
 				dataType : "json", // json타입은 문서에서 {"키값" : "value값","키값2": "value값2"}
 				data : { "memberId" : memberId },
 				success : function(result) { // 결과가 넘어와서 성공했을 때 받는 영역
-					// alert("전송 성공 테스트");
+					 alert("전송 성공 테스트");
 					// alert("길이는? " + result.length);
 					alert("cnt값은? " + result.cnt);
 					
