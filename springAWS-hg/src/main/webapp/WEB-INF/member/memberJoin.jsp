@@ -3,7 +3,7 @@
 <HTML>
 <HEAD>
 <TITLE> 회원가입 </TITLE>
-<link href="/resources/css/style2.css" type="text/css" rel="stylesheet">
+<link href="/resources/css/style.css" type="text/css" rel="stylesheet">
 <!--jquery CDN주소 -->
 <script src="https://code.jquery.com/jquery-latest.min.js"></script> 
 <script>
