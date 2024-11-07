@@ -19,11 +19,33 @@ and subject like concat('%',#{keyword},'%')
 select * from board where delyn='N'
 <include refid="search" /> <!-- str -->
 order by originbidx desc, depth asc limit #{startPageNum}, #{perPageNum}
+<!-- mybatis에서는 연산자 사용 불가 -->
 </select>
 
 <select id="boardTotalCount" parameterType="scri" resultType="int">
 select count(*) as cnt from board where delyn='N'
 <include refid="search" />
 </select>
+
+<insert id="boardInsert" parameterType="bv">
+	<selectKey keyProperty="bidx" resultType="int" order="AFTER">
+	select max(bidx) as bidx from board
+	</selectKey>
+	insert into board (originbidx,depth,level_,subject,contents,writer,password,midx,filename,ip)
+	value(null,0,0,#{subject},#{contents},#{writer},#{password},#{midx},#{uploadedFilename},#{ip})
+</insert>
 	
+<update id="boardOriginbidxUpdate" parameterType="int">
+update board set originbidx = #{bidx} where bidx = #{bidx}
+<!-- update board set /originbidx(bidx값은 null) = #{bidx}/ where bidx = #{bidx} -->
+</update>
+
+<select id="boardSelectOne" parameterType="int" resultType="bv">
+select * from board where delyn='N' and bidx=#{bidx}
+</select>
+
+<insert id="boardViewCnt" parameterType="int">
+update board set viewcnt = viewcnt + 1 where bidx= #{bidx}
+</insert>
+
 </mapper>

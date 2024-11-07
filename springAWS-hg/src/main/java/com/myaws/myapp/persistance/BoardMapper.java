@@ -13,5 +13,12 @@ public interface BoardMapper {
 	
 	public int boardTotalCount(SearchCriteria scri);
 	// hash맵을 넘기는 mybatis
-
+	
+	public int boardInsert(BoardVo bv);
+	
+	public int boardOriginbidxUpdate(int bidx);
+	// bidx값을 업데이트 치는 메서드
+	
+	public BoardVo boardSelectOne(int bidx);
+//	public BoardVo boardViewCnt(int bidx);
 }

@@ -16,7 +16,15 @@ public class BoardVo {
 	private String ip;
 	private String password;
 	private int midx;
+	private String uploadedFilename;
 	
+	
+	public String getUploadedFilename() {
+		return uploadedFilename;
+	}
+	public void setUploadedFilename(String uploadedFilename) {
+		this.uploadedFilename = uploadedFilename;
+	}
 	public int getBidx() {
 		return bidx;
 	}
@@ -59,12 +67,12 @@ public class BoardVo {
 	public void setWriter(String writer) {
 		this.writer = writer;
 	}
-	public String getFilename() {
-		return filename;
-	}
-	public void setFilename(String filename) {
-		this.filename = filename;
-	}
+//	public String getFilename() {
+//		return filename;
+//	}
+//	public void setFilename(String filename) {
+//		this.filename = filename;
+//	}
 	public int getRecom() {
 		return recom;
 	}

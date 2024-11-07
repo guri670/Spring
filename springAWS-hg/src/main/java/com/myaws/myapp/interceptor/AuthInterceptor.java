@@ -22,9 +22,9 @@ public class AuthInterceptor extends HandlerInterceptorAdapter{
 			// 로그인 페이지로 보낸다.
 			
 			saveUrl(request); //이동할 경로를 저장한다
+//			System.out.println("리스트로 들어왔니?");
 			
 			response.sendRedirect(request.getContextPath()+"/member/memberLogin.aws");
-			System.out.println("리스트로 들어왔니?");
 			return false;
 			
 		} else { // 회원정보가 저장되어있으면 이동함 
@@ -44,7 +44,7 @@ public class AuthInterceptor extends HandlerInterceptorAdapter{
 		String uri = request.getRequestURI(); // 전체경로주소
 		String param = request.getQueryString(); // 파라미터를 가져온다
 		
-		if(param != null || param.equals("null") || param.equals("")) {
+		if(param == null || param.equals("null") || param.equals("")) {
 			param="";
 		} else {
 			param = "?" + param;		

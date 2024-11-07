@@ -20,5 +20,6 @@
 <br>
 <br>
 <a href="<%=request.getContextPath() %>/board/boardList.aws">게시판 목록 페이지</a>
+
 </body>
-</html>
+</html> 
