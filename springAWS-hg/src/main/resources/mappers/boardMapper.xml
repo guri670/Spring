@@ -44,8 +44,19 @@ update board set originbidx = #{bidx} where bidx = #{bidx}
 select * from board where delyn='N' and bidx=#{bidx}
 </select>
 
-<insert id="boardViewCnt" parameterType="int">
+<insert id="boardViewCntUpdate" parameterType="int">
 update board set viewcnt = viewcnt + 1 where bidx= #{bidx}
 </insert>
+
+<insert id="boardRecomUpdate" parameterType="bv">
+	<selectKey keyProperty="recom" resultType="int" order="AFTER">
+	select recom from board where bidx= #{bidx}
+	</selectKey>
+	update board SET recom = recom + 1 where bidx = #{bidx}
+</insert>
+
+<update id = "boardDelete" parameterType="HashMap">
+update board set delyn = 'Y', modifyday=now() where bidx=#{bidx} and midx=#{midx} and password=#{password}
+</update>
 
 </mapper>

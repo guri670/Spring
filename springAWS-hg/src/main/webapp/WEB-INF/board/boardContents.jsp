@@ -6,10 +6,14 @@
 BoardVo bv = (BoardVo)request.getAttribute("bv");
 
 //강제 형변환 양쪽형을 맞춰준다.
-/* String memberName = "";
+ String memberName = "";
 if(session.getAttribute("memberName") != null){
 	memberName = (String)session.getAttribute("memberName");
-} */
+} 
+int midx=0;
+if(session.getAttribute("midx") != null){
+	midx = Integer.parseInt(session.getAttribute("midx").toString());
+}
 %> 
 
 
@@ -23,99 +27,182 @@ if(session.getAttribute("memberName") != null){
 <link href="<%=request.getContextPath() %>/resources/css/style2.css" rel="stylesheet">
 <script> 
 
-// 유효성 검사 삭제 및 ajax 사용
+function checkImageType(fileName) {
+	var parttern = /jpg$|gif$|png$|jpeg$/i; //자바스크립트의 정규표현식
+	return fileName.match(pattern);
+}
+<%-- getOriginalFileName("<%=bv.getFilename()%>"); --%>
 
+function getOriginalFileName(fileName) { //원본 파일이름 추출
+	var idx = fileName.lastIndexOf("_")+1;
+	//alert("fileName.substr : "+fileName.substr(idx));
+	return fileName.substr(idx);
+}
 
-<%--  $.boardCommentList = function() { 
-	// jQuery로 만드는 함수 ready밖에 생성
-	// alert("함수되는가?")
-	 $.ajax({
-			type : "get", // 전송방식
-			url : "<%=request.getContextPath()%>/comment/commentList.aws?bidx=<%=bv.getBidx()%>",
-			dataType : "json", // json타입은 문서에서 {"키값" : "value값","키값2": "value값2"}
-			success : function(result) { // 결과가 넘어와서 성공했을 때 받는 영역
-				alert("전송 성공 테스트");
-				//var str = "("+result.value+")";
-				//alert(str);
-				//$("#btn").val(str);
-			},
-			error : function() {
-				alert("전송 실패 테스트");
-		}
-	});
- }
+function getImageLink(fileName) {
+	var front = fileName.substr(0,12); // 0 ~ 12번까지
+	var end = fileName.substr(14); // 14번 ~ 끝까지 
+	return front+end ; // 즉 0~12번 / s / 14번 ~ 값이 없는 파일을 리턴한다.
+}
 
-
-$(document).ready(function() {
-	$.boardCommentList();
+function download() {
+	// 주소 사이에 -s 는빼고
+	var downloadImage = getImageLink("<%=bv.getFilename()%>"); 
+	var downLink="<%=request.getContextPath() %>/board/displayFile.aws?fileName="+downloadImage+"&down=1";
 	
-	$("#btn").click(function() {
-		// alert("추천버튼 클릭");
+	return downLink;	
+}
+
+<%-- function commentDel(cidx){	
+	let ans= confirm("삭제하시겠습니까?");	
+	if (ans== true){
 		
 		$.ajax({
-			type : "get", // 전송방식
-			url : "<%=request.getContextPath()%>/board/boardRecom.aws?bidx=<%=bv.getBidx()%>", 
-			dataType : "json", // json타입은 문서에서 {"키값" : "value값","키값2": "value값2"}
-			success : function(result) { // 결과가 넘어와서 성공했을 때 받는 영역
-				// alert("전송 성공 테스트");
-				var str = "추천("+result.recom+")";
-				$("#btn").val(str);
+			type :  "get",    //전송방식
+			url : "<%=request.getContextPath()%>/comment/commentDeleteAction.aws?cidx="+cidx,
+			dataType : "json",       // json타입은 문서에서  {"키값" : "value값","키값2":"value값2"}
+			success : function(result){   //결과가 넘어와서 성공했을 받는 영역
+			//	alert("전송성공 테스트");	
+			//	alert(result.value);
+			$.boardCommentList();			
+							
 			},
-			error : function(result) {
-				alert("전송 실패 테스트");
-			}
+			error : function(){  //결과가 실패했을때 받는 영역						
+				// alert("전송실패");
+			}			
+		});			
+	}	
+	return;
+} --%>
 
-		});
-	});
+
+
+
+
+<%-- //jquery로 만드는 함수  ready밖에 생성
+$.boardCommentList = function(){
+	//alert("ddddddd");
+	$.ajax({
+		type :  "get",    //전송방식
+		url : "<%=request.getContextPath()%>/comment/commentList.aws?bidx=<%=bv.getBidx()%>",
+		dataType : "json",       // json타입은 문서에서  {"키값" : "value값","키값2":"value값2"}
+		success : function(result){   //결과가 넘어와서 성공했을 받는 영역
+		//	alert("전송성공 테스트");			
+		
+		var strTr = "";				
+		$(result).each(function(){	
+			
+			var btnn="";			
+			 //현재로그인 사람과 댓글쓴 사람의 번호가 같을때만 나타내준다
+			if (this.midx == "<%=midx%>") {
+				if (this.delyn=="N"){
+					btnn= "<button type='button' onclick='commentDel("+this.cidx+");'>삭제</button>";
+				}			
+			}
+			strTr = strTr + "<tr>"
+			+"<td>"+this.cidx+"</td>"
+			+"<td>"+this.cwriter+"</td>"
+			+"<td class='content'>"+this.ccontents+"</td>"
+			+"<td>"+this.writeday+"</td>"
+			+"<td>"+btnn+"</td>"
+			+"</tr>";					
+		});		       
+		
+		var str  = "<table class='replyTable'>"
+			+"<tr>"
+			+"<th>번호</th>"
+			+"<th>작성자</th>"
+			+"<th>내용</th>"
+			+"<th>날짜</th>"
+			+"<th>DEL</th>"
+			+"</tr>"+strTr+"</table>";		
+		
+		$("#commentListView").html(str);		
+						
+		},
+		error : function(){  //결과가 실패했을때 받는 영역						
+			// alert("전송실패");
+		}			
+	});	
+} --%>
+
+$(document).ready(function(){	
+
+	$("#dUrl").html(getOriginalFileName("<%=bv.getFilename()%>"));
 	
-	$("#cmtBtn").click(function() {
-		// 로그인 유효성 검사
-		// alert("ddd");
-		let loginCheck = "<%=session.getAttribute("midx")%>";
-		if (loginCheck == "" || loginCheck == "null" || loginCheck == null){
+	$("#dUrl").click(function(){
+		$("#dUrl").attr("href",download());	
+		
+		return;
+	});	
+	
+//	$.boardCommentList();	
+	
+	$("#btn").click(function(){
+//		alert("추천버튼 클릭");		
+	
+		$.ajax({
+			type :  "get",    //전송방식
+			url : "<%=request.getContextPath()%>/board/boardRecom.aws?bidx=<%=bv.getBidx()%>",
+			dataType : "json",       // json타입은 문서에서  {"키값" : "value값","키값2":"value값2"}
+			success : function(result){   //결과가 넘어와서 성공했을 받는 영역
+			//	alert("전송성공 테스트");	
+		
+				var str ="추천("+result.recom+")";			
+				$("#btn").val(str);			
+			},
+			error : function(){  //결과가 실패했을때 받는 영역						
+				// alert("전송실패");
+			}			
+		});			
+	});	
+	
+<%-- 	$("#cmtBtn").click(function(){
+		//alert("ddd");
+		let loginCheck = "<%=midx%>";
+		//alert(loginCheck);
+		if (loginCheck == "" || loginCheck == "null" || loginCheck == null || loginCheck == 0){
 			alert("로그인을 해주세요");
 			return;
-		}
-		// 유효성 검사
+		}  				
 		let cwriter = $("#cwriter").val();
 		let ccontents = $("#ccontents").val();
 		
-		if(cwriter==""){ //cwriter가 없으면
+		if (cwriter == ""){
 			alert("작성자를 입력해주세요");
 			$("#cwriter").focus();
-			return;
-		} else if(ccontents==""){ //ccontents가 없으면
+			return;		
+		}else if (ccontents ==""){
 			alert("내용을 입력해주세요");
 			$("#ccontents").focus();
 			return;
 		}
 		
 		$.ajax({
-			type : "post", // 전송방식
+			type :  "post",    //전송방식
 			url : "<%=request.getContextPath()%>/comment/commentWriteAction.aws",
 			data : {"cwriter" : cwriter, 
-					"ccontents" : ccontents, 
-					"bidx" : "<%=bv.getBidx()%>", 
-					"midx":"<%=session.getAttribute("midx")%>"
-					},
-			dataType : "json", // json타입은 문서에서 {"키값" : "value값","키값2": "value값2"}
-			success : function(result) { // 결과가 넘어와서 성공했을 때 받는 영역
-				alert("전송 성공 테스트");
-				var str = "("+result.value+")";
-				alert(str);
-				$("#btn").val(str);
+					   "ccontents" : ccontents, 
+					   "bidx" : "<%=bv.getBidx()%>",
+					   "midx" : "<%=midx%>"
+					   },
+			dataType : "json",       // json타입은 문서에서  {"키값" : "value값","키값2":"value값2"}
+			success : function(result){   //결과가 넘어와서 성공했을 받는 영역
+				//alert("전송성공 테스트");			
+				//var str ="("+result.value+")";			
+				//alert(str);		
+				if(result.value ==1){
+					$("#ccontents").val("");
+				}				
+				$.boardCommentList();
 			},
-			error : function(result) {
-				alert("전송 실패 테스트");
-			}
-
-		});
-	});
-
-
-
+			error : function(){  //결과가 실패했을때 받는 영역						
+				alert("전송실패");
+			}			
+		});			
+	});	 --%>	
 });
- --%>
+
 
 
 
@@ -135,21 +222,21 @@ $(document).ready(function() {
 	<div class="content">
 		<%=bv.getContents() %> 
 	</div>
-<%-- 	 <% if (bv.getFilename() == null || bv.getFilename().equals("") ) {}else{ %>	
-	<img src="<%=request.getContextPath() %>/Images/<%=bv.getFilename() %>">	
+	<% if (bv.getFilename() == null || bv.getFilename().equals("") ) {}else{ %>	
+	<img src="<%=request.getContextPath() %>/board/displayFile.aws?fileName=<%=bv.getFilename()%>">	
 	<p>
-	<a href="<%=request.getContextPath() %>/board/boardDownload.aws?filename=<%=bv.getFilename() %>" class="fileDown">	
+	<a id="dUrl"  href="#"  class="fileDown">	
 	첨부파일 다운로드</a>
-	</p>	
-	<%} %>  --%>
+	</p>		
+	<%} %>
 	
 	
 </article>
 	
 <div class="btnBox">
-	<a class="btn aBtn" href="#">수정</a>
-	<a class="btn aBtn" href="#">삭제</a>
-	<a class="btn aBtn" href="#">답변</a>
+	<a class="btn aBtn" href="<%=request.getContextPath() %>/board/boardModify.aws?bidx=<%=bv.getBidx()%>">수정</a>
+	<a class="btn aBtn" href="<%=request.getContextPath() %>/board/boardDelete.aws?bidx=<%=bv.getBidx() %>">삭제</a>
+	<a class="btn aBtn" href="<%=request.getContextPath() %>/board/boardReply.aws?bidx=<%=bv.getBidx()%>">답변</a>
 	<a class="btn aBtn" href="<%=request.getContextPath() %>/board/boardList.aws">목록</a>
 </div>
 

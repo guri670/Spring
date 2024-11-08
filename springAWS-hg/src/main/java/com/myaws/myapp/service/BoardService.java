@@ -13,5 +13,7 @@ public interface BoardService {
 	
 	public BoardVo boardSelectOne(int bidx);
 	
-//	public BoardVo boardViewCnt(int bidx);
+	public int boardViewCntUpdate(int bidx);
+	public int boardRecomUpdate(int bidx);
+	public int boardDelete(int bidx, int midx, String password); // update -> 되면 1 안돼면 0으로 반환하기때문에 int형
 }

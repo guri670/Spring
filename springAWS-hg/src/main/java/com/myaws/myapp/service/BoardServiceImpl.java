@@ -63,11 +63,36 @@ public class BoardServiceImpl implements BoardService{
 		return bv;
 	}
 
-//	@Override
-//	public BoardVo boardViewCnt(int bidx) {
-//		BoardVo bv = bm.boardViewCnt(bidx);
-//		
-//		return bv;
-//	}
+	@Override
+	public int boardViewCntUpdate(int bidx) {
+		int cnt = bm.boardViewCntUpdate(bidx);
+		
+		return cnt;
+	}
+
+	@Override
+	public int boardRecomUpdate(int bidx) {
+	
+		BoardVo bv = new BoardVo();
+		bv.setBidx(bidx);
+		int cnt = bm.boardRecomUpdate(bv);
+		int recom = bv.getRecom();
+		
+		return recom;
+	}
+
+	@Override
+	public int boardDelete(int bidx, int midx, String password) {
+		
+		HashMap<String,Object> hm = new HashMap<String,Object>();
+		hm.put("bidx", bidx);
+		hm.put("midx", midx);
+		hm.put("password", password);
+		// bidx, midx password 매개변수를 hashmap에 담는다
+		
+		int cnt = bm.boardDelete(hm);
+		
+		return cnt;
+	}
 
 }

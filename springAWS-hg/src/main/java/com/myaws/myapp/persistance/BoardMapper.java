@@ -20,5 +20,8 @@ public interface BoardMapper {
 	// bidx값을 업데이트 치는 메서드
 	
 	public BoardVo boardSelectOne(int bidx);
-//	public BoardVo boardViewCnt(int bidx);
+	public int boardViewCntUpdate(int bidx);
+	public int boardRecomUpdate(BoardVo bv); // service 는 다르다
+	public int boardDelete(HashMap hm); // 매개변수가 3개이기때문에 -> impl에서 hashmap 설정
+
 }
