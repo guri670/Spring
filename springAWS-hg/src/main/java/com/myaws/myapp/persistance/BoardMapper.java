@@ -24,4 +24,7 @@ public interface BoardMapper {
 	public int boardRecomUpdate(BoardVo bv); // service 는 다르다
 	public int boardDelete(HashMap hm); // 매개변수가 3개이기때문에 -> impl에서 hashmap 설정
 
+	public int boardUpdate(BoardVo bv);
+	public int boardReplyInsert(BoardVo bv);
+	public int boardReplyUpdate(BoardVo bv);
 }

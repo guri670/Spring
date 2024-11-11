@@ -46,8 +46,10 @@
 	<mapping path="/board/boardWriteAction.aws" />
 	<mapping path="/board/boardDelete.aws" />
 	<mapping path="/board/boardDeleteAction.aws" />
+	<mapping path="/board/boardModify.aws" />
 	<mapping path="/board/boardModifyAction.aws" />
-	<mapping path="/board/boardReplyAction.aws" />
+<!-- 	<mapping path="/board/boardReply.aws" />
+	<mapping path="/board/boardReplyAction.aws" /> -->
 	<beans:ref bean ="authInterceptor" />	
 	</interceptor>	
 	</interceptors>

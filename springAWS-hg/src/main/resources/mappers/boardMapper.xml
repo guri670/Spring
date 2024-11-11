@@ -4,59 +4,90 @@
 
 <mapper namespace="com.myaws.myapp.persistance.BoardMapper">
 
-<sql id="search">
+	<sql id="search">
 
-<if test="searchType != null and searchType.equals('writer') ">
-and writer like concat('%',#{keyword},'%')
-</if>
-<if test="searchType != null and searchType.equals('subject') ">
-and subject like concat('%',#{keyword},'%')
-</if>
+		<if test="searchType != null and searchType.equals('writer') ">
+			and writer like concat('%',#{keyword},'%')
+		</if>
+		<if test="searchType != null and searchType.equals('subject') ">
+			and subject like concat('%',#{keyword},'%')
+		</if>
 
-</sql>
+	</sql>
 
-<select id="boardSelectAll" parameterType="HashMap" resultType="bv">
-select * from board where delyn='N'
-<include refid="search" /> <!-- str -->
-order by originbidx desc, depth asc limit #{startPageNum}, #{perPageNum}
-<!-- mybatis에서는 연산자 사용 불가 -->
-</select>
+	<select id="boardSelectAll" parameterType="HashMap"
+		resultType="bv">
+		select * from board where delyn='N'
+		<include refid="search" /> <!-- str -->
+		order by originbidx desc, depth asc limit #{startPageNum},
+		#{perPageNum}
+		<!-- mybatis에서는 연산자 사용 불가 -->
+	</select>
 
-<select id="boardTotalCount" parameterType="scri" resultType="int">
-select count(*) as cnt from board where delyn='N'
-<include refid="search" />
-</select>
+	<select id="boardTotalCount" parameterType="scri"
+		resultType="int">
+		select count(*) as cnt from board where delyn='N'
+		<include refid="search" />
+	</select>
 
-<insert id="boardInsert" parameterType="bv">
-	<selectKey keyProperty="bidx" resultType="int" order="AFTER">
-	select max(bidx) as bidx from board
-	</selectKey>
-	insert into board (originbidx,depth,level_,subject,contents,writer,password,midx,filename,ip)
-	value(null,0,0,#{subject},#{contents},#{writer},#{password},#{midx},#{uploadedFilename},#{ip})
-</insert>
-	
-<update id="boardOriginbidxUpdate" parameterType="int">
-update board set originbidx = #{bidx} where bidx = #{bidx}
-<!-- update board set /originbidx(bidx값은 null) = #{bidx}/ where bidx = #{bidx} -->
-</update>
+	<insert id="boardInsert" parameterType="bv">
+		<selectKey keyProperty="bidx" resultType="int" order="AFTER">
+			select
+			max(bidx) as bidx from board
+		</selectKey>
+		insert into board
+		(originbidx,depth,level_,subject,contents,writer,password,midx,filename,ip)
+		value(null,0,0,#{subject},#{contents},#{writer},#{password},#{midx},#{uploadedFilename},#{ip})
+	</insert>
 
-<select id="boardSelectOne" parameterType="int" resultType="bv">
-select * from board where delyn='N' and bidx=#{bidx}
-</select>
+	<update id="boardOriginbidxUpdate" parameterType="int">
+		update board set originbidx = #{bidx} where bidx = #{bidx}
+		<!-- update board set /originbidx(bidx값은 null) = #{bidx}/ where bidx = 
+			#{bidx} -->
+	</update>
 
-<insert id="boardViewCntUpdate" parameterType="int">
-update board set viewcnt = viewcnt + 1 where bidx= #{bidx}
-</insert>
+	<select id="boardSelectOne" parameterType="int" resultType="bv">
+		select * from board where delyn='N' and bidx=#{bidx}
+	</select>
 
-<insert id="boardRecomUpdate" parameterType="bv">
-	<selectKey keyProperty="recom" resultType="int" order="AFTER">
-	select recom from board where bidx= #{bidx}
-	</selectKey>
-	update board SET recom = recom + 1 where bidx = #{bidx}
-</insert>
+	<insert id="boardViewCntUpdate" parameterType="int">
+		update board set
+		viewcnt = viewcnt + 1 where bidx= #{bidx}
+	</insert>
 
-<update id = "boardDelete" parameterType="HashMap">
-update board set delyn = 'Y', modifyday=now() where bidx=#{bidx} and midx=#{midx} and password=#{password}
-</update>
+	<insert id="boardRecomUpdate" parameterType="bv">
+		<selectKey keyProperty="recom" resultType="int"
+			order="AFTER">
+			select recom from board where bidx= #{bidx}
+		</selectKey>
+		update board SET recom = recom + 1 where bidx = #{bidx}
+	</insert>
 
+	<update id="boardDelete" parameterType="HashMap">
+		update board set delyn =
+		'Y', modifyday=now() where bidx=#{bidx} and
+		midx=#{midx} and
+		password=#{password}
+	</update>
+	<update id="boardUpdate" parameterType="bv">
+		update board set
+		subject=#{subject}, contents=#{contents}, writer=#{writer},
+		modifyday=
+		now(), filename=#{uploadedFilename} where bidx=#{bidx} and
+		password=#{password} and midx=#{midx}
+	</update>
+
+	<insert id="boardReplyInsert" parameterType="bv">
+		<selectKey keyProperty="bidx" resultType="int" order="AFTER">
+			select max(bidx) as bidx from board
+		</selectKey>
+		insert into board
+		(originbidx,depth,level_,subject,contents,writer,midx,filename,password,ip)
+		values(#{originbidx},#{depth}+1,#{level_}+1,#{subject},#{contents},#{writer},#{midx},#{uploadedFilename},#{password},#{ip})
+	</insert>
+
+	<update id="boardReplyUpdate" parameterType="bv">
+		update board set
+		depth = depth+1 where originbidx=#{originbidx} and depth > #{depth}
+	</update>
 </mapper>

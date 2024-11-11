@@ -1,24 +1,19 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%-- <%@page include file="/common/loginCheck.jsp" %> --%>
-<%@page import = "com.myaws.myapp.domain.*"%>
+<%@page import = "com.myaws.myapp.domain.BoardVo"%>
 <%
-String msg= "";
-if (request.getAttribute("msg") != null){
- msg = (String)request.getAttribute("msg");
-}
-
-if (msg !=""){
-out.println("<script>alert('"+msg+"');</script>");	
-}
+/* int bidx = (int)request.getAttribute("bidx");
+int originbidx = (int)request.getAttribute("originbidx");
+int depth = (int)request.getAttribute("depth");
+int level_ = (int)request.getAttribute("level_"); */
+BoardVo bv = (BoardVo)request.getAttribute("bv"); 
 %>
-    
-<!DOCTYPE html>
 
+<!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
-<title>글쓰기</title>
+<title>글답변</title>
 <link href="<%=request.getContextPath() %>/resources/css/style2.css" type="text/css" rel="stylesheet">
 <script> 
 
@@ -39,19 +34,18 @@ function check() {
 		  alert("작성자를 입력해주세요");
 		  fm.writer.focus();
 		  return;
-	  }else if (fm.password.value == "") {
+	  } else if (fm.password.value == "") {
 		  alert("비밀번호를 입력해주세요");
 		  fm.password.focus();
 		  return;
 	  }
 	  
 	  let ans = confirm("저장하시겠습니까?");
-	  // 함수의 값은 참과 거짓 true & false로 나눈다.
 	  
 	  if (ans == true) {
-		  fm.action="<%=request.getContextPath()%>/board/boardWriteAction.aws";
+		  fm.action="<%=request.getContextPath()%>/board/boardReplyAction.aws";
 		  fm.method="post";
-		  fm.enctype="multipart/form-data"; // enctype
+		  fm.enctype="multipart/form-data";
 		  fm.submit();
 	  }	  
 	  
@@ -62,10 +56,14 @@ function check() {
 </head>
 <body>
 <header>
-	<h2 class="mainTitle">글쓰기</h2>
+	<h2 class="mainTitle">글답변</h2>
 </header>
 
 <form name="frm">
+<input type="hidden" name="bidx" value="<%=bv.getBidx()%>">
+<input type="hidden" name="originbidx" value="<%=bv.getOriginbidx()%>">
+<input type="hidden" name="depth" value="<%=bv.getDepth()%>">
+<input type="hidden" name="level_" value="<%=bv.getLevel_()%>">
 	<table class="writeTable">
 		<tr>
 			<th>제목</th>
@@ -91,7 +89,7 @@ function check() {
 	
 	<div class="btnBox">
 		<button type="button" class="btn" onclick="check();">저장</button>
-		<a class="btn aBtn" onclick="history.back();">취소</a>
+		<a class="btn aBtn" href="#" onclick="history.back();">취소</a>
 	</div>	
 </form>
 

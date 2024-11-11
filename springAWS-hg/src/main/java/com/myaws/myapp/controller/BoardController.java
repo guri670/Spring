@@ -75,10 +75,10 @@ public class BoardController {
 		String path = "WEB-INF/board/boardWrite";
 		return path;
 	}
-	
+
 	@RequestMapping(value = "boardContents.aws")
 	public String boardContents(@RequestParam("bidx") int bidx, Model model) {
-		
+
 		boardService.boardViewCntUpdate(bidx);
 		BoardVo bv = boardService.boardSelectOne(bidx);
 		model.addAttribute("bv", bv);
@@ -88,11 +88,8 @@ public class BoardController {
 	}
 
 	@RequestMapping(value = "boardWriteAction.aws")
-	public String boardWriteAction(BoardVo bv, 	
-			@RequestParam("attachfile") MultipartFile attachfile,		
-			HttpServletRequest request,
-			RedirectAttributes rttr
-			) throws Exception {	
+	public String boardWriteAction(BoardVo bv, @RequestParam("attachfile") MultipartFile attachfile,
+			HttpServletRequest request, RedirectAttributes rttr) throws Exception {
 
 		MultipartFile file = attachfile;
 		String uploadedFileName = "";
@@ -122,41 +119,42 @@ public class BoardController {
 		return path;
 
 	}
+
 	@ResponseBody // (JSON 객체를 받아온다 body로)
-	@RequestMapping(value="boardRecom.aws", method = RequestMethod.GET)
-	public JSONObject boardRecom(@RequestParam("bidx") int bidx){  //json형식으로 넘겨야한다 모를때 타입을 ? 를 넣어도된다.
+	@RequestMapping(value = "boardRecom.aws", method = RequestMethod.GET)
+	public JSONObject boardRecom(@RequestParam("bidx") int bidx) { // json형식으로 넘겨야한다 모를때 타입을 ? 를 넣어도된다.
 
 		int value = boardService.boardRecomUpdate(bidx);
-		
+
 		JSONObject js = new JSONObject();
 		js.put("recom", value);
-		
-		return js ; // json 객체가 나와야한다
+
+		return js; // json 객체가 나와야한다
 	}
-	
-	@RequestMapping(value="boardDeleteAction.aws", method = RequestMethod.POST)
-	public String boardDeleteAction(
-			@RequestParam("bidx") int bidx, 
-			@RequestParam("password") String password,
-			HttpSession session){  //json형식으로 넘겨야한다 모를때 타입을 ? 를 넣어도된다.
+
+	@RequestMapping(value = "boardDeleteAction.aws", method = RequestMethod.POST)
+	public String boardDeleteAction(@RequestParam("bidx") int bidx, @RequestParam("password") String password,
+			HttpSession session) { // json형식으로 넘겨야한다 모를때 타입을 ? 를 넣어도된다.
 
 		int midx = Integer.parseInt(session.getAttribute("midx").toString());
-		boardService.boardDelete(bidx,midx,password);
-		
-		String path ="redirect:/board/boardList.aws";
-		
-		return path ; 
+		int value = boardService.boardDelete(bidx, midx, password);
+
+		String path = "redirect:/board/boardList.aws";
+		if (value == 0) {
+			path = "redirect:/board/boardDelete.aws?bidx=" + bidx;
+		}
+		return path;
 	}
-	
-	@RequestMapping(value="boardDelete.aws")
-	public String boardDelete(@RequestParam("bidx") int bidx, Model model ){  
-		
-		model.addAttribute("bidx",bidx);
-		String path ="WEB-INF/board/boardDelete";
-		
-		return path ; 
+
+	@RequestMapping(value = "boardDelete.aws")
+	public String boardDelete(@RequestParam("bidx") int bidx, Model model) {
+
+		model.addAttribute("bidx", bidx);
+		String path = "WEB-INF/board/boardDelete";
+
+		return path;
 	}
-	
+
 	@RequestMapping(value = "displayFile.aws", method = RequestMethod.GET)
 	public ResponseEntity<byte[]> displayFile(@RequestParam("fileName") String fileName,
 			@RequestParam(value = "down", defaultValue = "0") int down) {
@@ -202,7 +200,112 @@ public class BoardController {
 
 		return entity;
 	}
+
+	@RequestMapping(value = "boardModify.aws")
+	public String boardModify(@RequestParam("bidx") int bidx, Model model) {
+
+		BoardVo bv = boardService.boardSelectOne(bidx);
+		model.addAttribute("bv", bv);
+
+		String path = "WEB-INF/board/boardModify";
+		return path;
+	}
+
+	@RequestMapping(value = "boardModifyAction.aws")
+	// 컨트롤러 완성하고 서비스를 불러온다.
+	public String boardModifyAction(BoardVo bv, // bv객체 안에 값들이 담겨져있다.
+			@RequestParam("attachfile") MultipartFile attachfile, HttpServletRequest request, RedirectAttributes rttr)
+			throws Exception {
+
+		int value = 0;
+
+		MultipartFile file = attachfile;
+		String uploadedFileName = "";
+
+		if (!file.getOriginalFilename().equals("")) {
+			uploadedFileName = UploadFileUtiles.uploadFile(uploadPath, file.getOriginalFilename(), file.getBytes());
+		}
+
+		String midx = request.getSession().getAttribute("midx").toString();
+		int midx_int = Integer.parseInt(midx);
+
+		String ip = getUserIp(request);
+
+		bv.setUploadedFilename(uploadedFileName); // filename 칼럼값으로 넣는다.
+		bv.setMidx(midx_int);
+		bv.setIp(ip);
+		// 파일 업로드를 하고 update를 하기 위한 service를 만든다.
+
+		value = boardService.boardUpdate(bv);
+
+		String path = "";
+
+		if (value == 0) {
+			rttr.addFlashAttribute("msg", "글이 수정되지 않았습니다.");
+			path = "redirect:/board/boardModify.aws?bidx=" + bv.getBidx();
+		} else {
+			path = "redirect:/board/boardContents.aws?bidx=" + bv.getBidx();
+		}
+
+		return path;
+	}
 	
+	@RequestMapping(value="boardReplyAction")
+	public String boardReplyAction(BoardVo bv, // bv객체 안에 값들이 담겨져있다.
+			@RequestParam("attachfile") MultipartFile attachfile, 
+			HttpServletRequest request, 
+			RedirectAttributes rttr)
+			throws Exception {
+
+			int value = 0;
+
+			MultipartFile file = attachfile;
+			String uploadedFileName = "";
+
+			if (!file.getOriginalFilename().equals("")) {
+				uploadedFileName = UploadFileUtiles.uploadFile(uploadPath, file.getOriginalFilename(), file.getBytes());
+			}
+
+			String midx = request.getSession().getAttribute("midx").toString();
+			int midx_int = Integer.parseInt(midx);
+
+			String ip = getUserIp(request);
+
+			bv.setUploadedFilename(uploadedFileName); // filename 칼럼값으로 넣는다.
+			bv.setMidx(midx_int);
+			bv.setIp(ip);
+			// 파일 업로드를 하고 update를 하기 위한 service를 만든다.
+
+
+			int maxBidx = 0;
+			maxBidx = boardService.boardReply(bv);
+			System.out.println("maxBidx"+maxBidx);
+
+			String path = "";
+			if(maxBidx != 0) {
+				path = "redirect:/board/boardContents.aws?bidx=" + maxBidx;	
+			} else {
+				rttr.addFlashAttribute("msg", "답변이 등록되지 않았습니다");
+				path = "redirect:/board/boardReply.aws?bidx=" + bv.getBidx();
+			}
+
+			return path;
+		}
+	
+	@RequestMapping(value="boardReply")
+	public String boardReply(@RequestParam("bidx") int bidx, Model model) {
+	
+		BoardVo bv = boardService.boardSelectOne(bidx);
+
+//		int originbidx = bv.getOriginbidx();
+//		int depth = bv.getDepth();
+//		int level_ = bv.getLevel_();
+		
+		model.addAttribute("bv", bv);
+		
+		String path ="WEB-INF/board/boardReply";
+		return path;
+	}
 	
 	
 	

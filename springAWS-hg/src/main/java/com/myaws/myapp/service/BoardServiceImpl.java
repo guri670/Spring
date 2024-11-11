@@ -95,4 +95,26 @@ public class BoardServiceImpl implements BoardService{
 		return cnt;
 	}
 
+	@Override
+	public int boardUpdate(BoardVo bv) {
+
+		int value = bm.boardUpdate(bv);
+		
+		return value;
+	}
+	
+	@Transactional
+	@Override
+	public int boardReply(BoardVo bv) {
+		
+		int value = bm.boardReplyUpdate(bv);
+		System.out.println("value"+value);
+		
+		int value2 = bm.boardReplyInsert(bv);
+		
+		int maxBidx = bv.getBidx();
+		return maxBidx;
+	}
+
+
 }
