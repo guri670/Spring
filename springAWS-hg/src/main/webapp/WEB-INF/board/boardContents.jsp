@@ -79,18 +79,18 @@ function download() {
 
 
 
-<%-- //jquery로 만드는 함수  ready밖에 생성
+ //jquery로 만드는 함수  ready밖에 생성
 $.boardCommentList = function(){
 	//alert("ddddddd");
 	$.ajax({
 		type :  "get",    //전송방식
-		url : "<%=request.getContextPath()%>/comment/commentList.aws?bidx=<%=bv.getBidx()%>",
+		url : "<%=request.getContextPath()%>/comment/<%=bv.getBidx()%>commentList.aws",
 		dataType : "json",       // json타입은 문서에서  {"키값" : "value값","키값2":"value값2"}
 		success : function(result){   //결과가 넘어와서 성공했을 받는 영역
-		//	alert("전송성공 테스트");			
+		alert("전송성공 테스트");			
 		
 		var strTr = "";				
-		$(result).each(function(){	
+		$(result.clist).each(function(){	
 			
 			var btnn="";			
 			 //현재로그인 사람과 댓글쓴 사람의 번호가 같을때만 나타내준다
@@ -124,7 +124,7 @@ $.boardCommentList = function(){
 			// alert("전송실패");
 		}			
 	});	
-} --%>
+} 
 
 $(document).ready(function(){	
 
@@ -136,17 +136,17 @@ $(document).ready(function(){
 		return;
 	});	
 	
-//	$.boardCommentList();	
+	$.boardCommentList();	
 	
 	$("#btn").click(function(){
-//		alert("추천버튼 클릭");		
+		alert("추천버튼 클릭");		
 	
 		$.ajax({
 			type :  "get",    //전송방식
 			url : "<%=request.getContextPath()%>/board/boardRecom.aws?bidx=<%=bv.getBidx()%>",
 			dataType : "json",       // json타입은 문서에서  {"키값" : "value값","키값2":"value값2"}
 			success : function(result){   //결과가 넘어와서 성공했을 받는 영역
-			//	alert("전송성공 테스트");	
+			//alert("전송성공 테스트");	
 		
 				var str ="추천("+result.recom+")";			
 				$("#btn").val(str);			
@@ -157,7 +157,7 @@ $(document).ready(function(){
 		});			
 	});	
 	
-<%-- 	$("#cmtBtn").click(function(){
+ 	$("#cmtBtn").click(function(){
 		//alert("ddd");
 		let loginCheck = "<%=midx%>";
 		//alert(loginCheck);
@@ -200,7 +200,7 @@ $(document).ready(function(){
 				alert("전송실패");
 			}			
 		});			
-	});	 --%>	
+	});	 	
 });
 
 
