@@ -14,6 +14,9 @@
 		insert into comment (csubject,ccontents,cwriter,bidx,midx,cip)
 		value (null,#{ccontents},#{cwriter},#{bidx},#{midx},#{cip})
 	</insert>
-
+	
+	<update id="commentDelete" parameterType="cv">
+	update comment set delyn = 'Y', cip=#{cip} where cidx=#{cidx} and midx=#{midx}
+	</update>
 </mapper>
 	

@@ -37,5 +37,13 @@ public class CommentServiceImpl implements CommentService{
 		
 		return value;
 	}
+
+	@Override
+	public int commentDelete(CommentVo cv) {
+
+		int value = cm.commentDelete(cv);
+		
+		return value;
+	}
 }
 

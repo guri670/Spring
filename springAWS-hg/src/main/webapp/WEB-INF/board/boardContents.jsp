@@ -54,28 +54,28 @@ function download() {
 	return downLink;	
 }
 
-<%-- function commentDel(cidx){	
+function commentDel(cidx){	
 	let ans= confirm("삭제하시겠습니까?");	
 	if (ans== true){
 		
 		$.ajax({
 			type :  "get",    //전송방식
-			url : "<%=request.getContextPath()%>/comment/commentDeleteAction.aws?cidx="+cidx,
+			url : "<%=request.getContextPath()%>/comment/"+cidx+"/commentDeleteAction.aws",
 			dataType : "json",       // json타입은 문서에서  {"키값" : "value값","키값2":"value값2"}
 			success : function(result){   //결과가 넘어와서 성공했을 받는 영역
-			//	alert("전송성공 테스트");	
-			//	alert(result.value);
+			alert("전송성공 테스트");	
+			alert(result.value);
 			$.boardCommentList();			
 							
 			},
-			error : function(){  //결과가 실패했을때 받는 영역						
-				// alert("전송실패");
+			error : function(){  //결과가 실패했을때 받는 영역	
+			alert(result.value);
+			alert("전송실패");
 			}			
 		});			
 	}	
 	return;
-} --%>
-
+}
 
 
 
