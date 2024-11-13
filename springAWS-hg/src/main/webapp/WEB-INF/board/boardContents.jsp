@@ -64,12 +64,12 @@ function commentDel(cidx){
 			dataType : "json",       // json타입은 문서에서  {"키값" : "value값","키값2":"value값2"}
 			success : function(result){   //결과가 넘어와서 성공했을 받는 영역
 			alert("전송성공 테스트");	
-			alert(result.value);
+			//alert(result.value);
 			$.boardCommentList();			
 							
 			},
 			error : function(){  //결과가 실패했을때 받는 영역	
-			alert(result.value);
+			//alert(result.value);
 			alert("전송실패");
 			}			
 		});			
@@ -83,12 +83,17 @@ function commentDel(cidx){
  //jquery로 만드는 함수  ready밖에 생성
 $.boardCommentList = function(){
 	//alert("ddddddd");
+  	//alert("test");
+	let block = $("#block").val();
+  	alert("block:"+block);
+  	
 	$.ajax({
 		type :  "get",    //전송방식
-		url : "<%=request.getContextPath()%>/comment/<%=bv.getBidx()%>/commentList.aws",
+		url : "<%=request.getContextPath()%>/comment/<%=bv.getBidx()%>/"+block+"/commentList.aws",
 		dataType : "json",       // json타입은 문서에서  {"키값" : "value값","키값2":"value값2"}
 		success : function(result){   //결과가 넘어와서 성공했을 받는 영역
 		alert("전송성공 테스트");			
+		
 		
 		var strTr = "";				
 		$(result.clist).each(function(){	
@@ -118,11 +123,21 @@ $.boardCommentList = function(){
 			+"<th>DEL</th>"
 			+"</tr>"+strTr+"</table>";		
 		
-		$("#commentListView").html(str);		
-						
+		$("#commentListView").html(str);	
+		
+		if(result.moreView =="N") {
+			$("#morebtn").css("display","none"); //감춘다
+		} else {
+			$("#morebtn").css("display","block"); //보여준다
+		}
+		
+		let nextBlock = result.nextBlock;
+		$("#block").val(nextBlock);
+		
+					
 		},
 		error : function(){  //결과가 실패했을때 받는 영역						
-			// alert("전송실패");
+			alert("전송실패");
 		}			
 	});	
 } 
@@ -202,6 +217,10 @@ $(document).ready(function(){
 			}			
 		});			
 	});	 	
+ 	
+ 	$("#more").click(function(){
+ 		$.boardCommentList();
+ 	});
 });
 
 
@@ -251,6 +270,10 @@ $(document).ready(function(){
 	</form> 
 	
    <div id="commentListView"></div>
+   <div id="morebtn" style= "text-align: center,line-height:50px;">
+   <button type="button" id="more">더보기</button>
+   <input type="text" id="block" value="1">
+   </div>
    
 </article>
 

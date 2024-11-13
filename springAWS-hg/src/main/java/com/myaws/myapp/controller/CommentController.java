@@ -27,13 +27,29 @@ public class CommentController {
 	@Autowired(required = false) // null도 포함
 	private UserIp userIp;
 	
-	@RequestMapping(value="/{bidx}/commentList.aws")
-	public JSONObject commentList(@PathVariable("bidx") int bidx) {
+	@RequestMapping(value="/{bidx}/{block}/commentList.aws")
+	public JSONObject commentList(
+			@PathVariable("bidx") int bidx,
+			@PathVariable("block") int block) {
+		// 타입이 같으면(int) hashmap으로 부르지않고 불러올땐 bidx,block으로 부르지않고 숫자로 부른다. 
+		// System.out.println(block);
 		
-		JSONObject js = new JSONObject();
+		String moreView="";
+		int nextBlock=0;
+		int cnt = commentService.commentTotalCnt(bidx);
 		
-		ArrayList<CommentVo> clist = commentService.commentSelectAll(bidx);
+		if(cnt > block*15) {
+			moreView = "Y";
+			nextBlock = block+1;
+		} else {
+			moreView = "N";
+			nextBlock = block;
+		}
+		ArrayList<CommentVo> clist = commentService.commentSelectAll(bidx,block);
+		JSONObject js = new JSONObject();		
 		js.put("clist", clist);
+		js.put("moreView", moreView);
+		js.put("nextBlock", nextBlock);
 		
 		
 		return js;
