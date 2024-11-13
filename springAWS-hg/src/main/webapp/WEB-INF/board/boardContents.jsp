@@ -4,7 +4,7 @@
 
 <%
 BoardVo bv = (BoardVo)request.getAttribute("bv");
-
+CommentVo cv = (CommentVo)request.getAttribute("cv");
 //강제 형변환 양쪽형을 맞춰준다.
  String memberName = "";
 if(session.getAttribute("memberName") != null){
@@ -14,6 +14,7 @@ int midx=0;
 if(session.getAttribute("midx") != null){
 	midx = Integer.parseInt(session.getAttribute("midx").toString());
 }
+
 %> 
 
 
@@ -84,7 +85,7 @@ $.boardCommentList = function(){
 	//alert("ddddddd");
 	$.ajax({
 		type :  "get",    //전송방식
-		url : "<%=request.getContextPath()%>/comment/<%=bv.getBidx()%>commentList.aws",
+		url : "<%=request.getContextPath()%>/comment/<%=bv.getBidx()%>/commentList.aws",
 		dataType : "json",       // json타입은 문서에서  {"키값" : "value값","키값2":"value값2"}
 		success : function(result){   //결과가 넘어와서 성공했을 받는 영역
 		alert("전송성공 테스트");			
@@ -241,31 +242,16 @@ $(document).ready(function(){
 </div>
 
 <article class="commentContents">
-	<%-- <form name="frm">
+	<form name="frm">
 		<p class="commentWriter">
 		<input type="text" id="cwriter" name="cwriter" value="<%=memberName %>"readonly="readonly" style="width:100px;">
 		<!-- readonly 속성으로 읽기만 가능하게(수정불가) 만든다. --></p>	
 		<input type="text" id="ccontents" name="ccontents"> <!-- id값 부여 name sql 데이터와 일치 -->
 		<button type="button" id="cmtBtn" class="replyBtn">댓글쓰기</button> <!-- id값 부여 및 유효성 검사 함수 제거 -->
-	</form> --%>
+	</form> 
 	
-	
-	<table class="replyTable">
-		<tr>
-			<th>번호</th>
-			<th>작성자</th>
-			<th>내용</th>
-			<th>날짜</th>
-			<th>DEL</th>
-		</tr>
-		<tr>
-			<td>1</td>
-			<td>홍길동</td>
-			<td class="content">댓글입니다</td>
-			<td>2024-10-18</td>
-			<td>sss</td>
-		</tr>
-	</table>
+   <div id="commentListView"></div>
+   
 </article>
 
 </body>

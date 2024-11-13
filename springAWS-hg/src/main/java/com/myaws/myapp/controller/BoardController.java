@@ -35,6 +35,7 @@ import com.myaws.myapp.domain.SearchCriteria;
 import com.myaws.myapp.service.BoardService;
 import com.myaws.myapp.util.MediaUtils;
 import com.myaws.myapp.util.UploadFileUtiles;
+import com.myaws.myapp.util.UserIp;
 
 @Controller
 @RequestMapping(value = "/board/")
@@ -50,6 +51,9 @@ public class BoardController {
 
 	@Resource(name = "uploadPath")
 	private String uploadPath;
+	
+	@Autowired(required = false) // null도 포함
+	private UserIp userIp;
 
 	@RequestMapping(value = "boardList.aws")
 	public String boardList(SearchCriteria scri, Model model) {
@@ -100,7 +104,7 @@ public class BoardController {
 		String midx = request.getSession().getAttribute("midx").toString();
 		int midx_int = Integer.parseInt(midx);
 
-		String ip = getUserIp(request);
+		String ip = userIp.getUserIp(request);
 
 		bv.setUploadedFilename(uploadedFileName);
 		bv.setMidx(midx_int);
@@ -229,7 +233,7 @@ public class BoardController {
 		String midx = request.getSession().getAttribute("midx").toString();
 		int midx_int = Integer.parseInt(midx);
 
-		String ip = getUserIp(request);
+		String ip = userIp.getUserIp(request);
 
 		bv.setUploadedFilename(uploadedFileName); // filename 칼럼값으로 넣는다.
 		bv.setMidx(midx_int);
@@ -269,7 +273,7 @@ public class BoardController {
 			String midx = request.getSession().getAttribute("midx").toString();
 			int midx_int = Integer.parseInt(midx);
 
-			String ip = getUserIp(request);
+			String ip = userIp.getUserIp(request);
 
 			bv.setUploadedFilename(uploadedFileName); // filename 칼럼값으로 넣는다.
 			bv.setMidx(midx_int);
@@ -306,45 +310,6 @@ public class BoardController {
 		String path ="WEB-INF/board/boardReply";
 		return path;
 	}
-	
-	
-	
 
-	public String getUserIp(HttpServletRequest request) throws Exception {
-		String ip = null;
-		ip = request.getHeader("X-Forwarded-For");
-
-		if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
-			ip = request.getHeader("Proxy-Client-IP");
-		}
-		if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
-			ip = request.getHeader("WL-Proxy-Client-IP");
-		}
-		if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
-			ip = request.getHeader("HTTP_CLIENT_IP");
-		}
-		if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
-			ip = request.getHeader("HTTP_X_FORWARDED_FOR");
-		}
-		if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
-			ip = request.getHeader("X-Real-IP");
-		}
-		if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
-			ip = request.getHeader("X-RealIP");
-		}
-		if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
-			ip = request.getHeader("REMOTE_ADDR");
-		}
-		if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
-			ip = request.getRemoteAddr();
-		}
-
-		if (ip.equals("0:0:0:0:0:0:0:1") || ip.equals("127.0.0.1")) {
-			InetAddress address = InetAddress.getLocalHost();
-			ip = address.getHostAddress();
-		}
-
-		return ip;
-	}
 
 }
