@@ -1,15 +1,15 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%-- <%@page import="com.myaws.myapp.domain.*" %>
- --%>
-<%String bidx = request.getAttribute("bidx").toString(); %>
+<%@ taglib prefix = "c" uri= "http://java.sun.com/jsp/jstl/core" %>
+
+<%-- <%String bidx = request.getAttribute("bidx").toString(); %> --%>
 
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
 <title>글삭제</title>
-<link href="<%=request.getContextPath() %>/resources/css/style2.css" rel="stylesheet">
+<link href="${pageContext.request.contextPath}/resources/css/style2.css" rel="stylesheet">
 <script> 
 
 function check() {
@@ -26,7 +26,7 @@ function check() {
 	  let ans = confirm("삭제하시겠습니까?");
 	  
 	  if (ans == true) {
-		  fm.action="<%=request.getContextPath()%>/board/boardDeleteAction.aws";
+		  fm.action="${pageContext.request.contextPath}/board/boardDeleteAction.aws";
 		  fm.method="post";
 		  fm.submit();
 	  }	  
@@ -42,7 +42,7 @@ function check() {
 </header>
 
 <form name="frm">
-<input type="hidden" name="bidx" value="<%=bidx%>">
+<input type="hidden" name="bidx" value="${bidx}">
 	<table class="writeTable">
 		<tr>
 			<th>비밀번호</th>

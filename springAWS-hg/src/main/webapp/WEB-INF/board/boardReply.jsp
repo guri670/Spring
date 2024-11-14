@@ -1,12 +1,13 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@page import = "com.myaws.myapp.domain.BoardVo"%>
+<%@ taglib prefix = "c" uri= "http://java.sun.com/jsp/jstl/core" %>
 <%
 /* int bidx = (int)request.getAttribute("bidx");
 int originbidx = (int)request.getAttribute("originbidx");
 int depth = (int)request.getAttribute("depth");
-int level_ = (int)request.getAttribute("level_"); */
-BoardVo bv = (BoardVo)request.getAttribute("bv"); 
+int level_ = (int)request.getAttribute("level_"); 
+BoardVo bv = (BoardVo)request.getAttribute("bv"); */
 %>
 
 <!DOCTYPE html>
@@ -14,7 +15,7 @@ BoardVo bv = (BoardVo)request.getAttribute("bv");
 <head>
 <meta charset="UTF-8">
 <title>글답변</title>
-<link href="<%=request.getContextPath() %>/resources/css/style2.css" type="text/css" rel="stylesheet">
+<link href="${pageContext.request.contextPath}/resources/css/style2.css" type="text/css" rel="stylesheet">
 <script> 
 
 function check() {
@@ -43,7 +44,7 @@ function check() {
 	  let ans = confirm("저장하시겠습니까?");
 	  
 	  if (ans == true) {
-		  fm.action="<%=request.getContextPath()%>/board/boardReplyAction.aws";
+		  fm.action="${pageContext.request.contextPath}/board/boardReplyAction.aws";
 		  fm.method="post";
 		  fm.enctype="multipart/form-data";
 		  fm.submit();
@@ -60,10 +61,10 @@ function check() {
 </header>
 
 <form name="frm">
-<input type="hidden" name="bidx" value="<%=bv.getBidx()%>">
-<input type="hidden" name="originbidx" value="<%=bv.getOriginbidx()%>">
-<input type="hidden" name="depth" value="<%=bv.getDepth()%>">
-<input type="hidden" name="level_" value="<%=bv.getLevel_()%>">
+<input type="hidden" name="bidx" value="${bv.bidx}">
+<input type="hidden" name="originbidx" value="${bv.originbidx}">
+<input type="hidden" name="depth" value="${bv.depth}">
+<input type="hidden" name="level_" value="${bv.level_}">
 	<table class="writeTable">
 		<tr>
 			<th>제목</th>

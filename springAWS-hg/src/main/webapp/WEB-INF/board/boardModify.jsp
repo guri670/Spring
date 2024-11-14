@@ -1,9 +1,10 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@page import="com.myaws.myapp.domain.*" %>
+<%@ taglib prefix = "c" uri= "http://java.sun.com/jsp/jstl/core" %>
 <%
-BoardVo bv = (BoardVo)request.getAttribute("bv");
-//강제 형변환 양쪽형을 맞춰준다. 
+/* BoardVo bv = (BoardVo)request.getAttribute("bv");
+//강제 형변환 양쪽형을 맞춰준다.  */
 %> 
 
 <!DOCTYPE html>
@@ -11,7 +12,7 @@ BoardVo bv = (BoardVo)request.getAttribute("bv");
 <head>
 <meta charset="UTF-8">
 <title>글수정</title>
-<link href="<%=request.getContextPath() %>/resources/css/style2.css" rel="stylesheet">
+<link href="${pageContext.request.contextPath}/resources/css/style2.css" rel="stylesheet">
 <script> 
 
 function check() {
@@ -40,7 +41,7 @@ function check() {
 	  let ans = confirm("저장하시겠습니까?");
 	  
 	  if (ans == true) {
-		  fm.action="<%=request.getContextPath()%>/board/boardModifyAction.aws";
+		  fm.action="${pageContext.request.contextPath}/board/boardModifyAction.aws";
 		  fm.method="post";
 		  fm.enctype="multipart/form-data"; // 이미지와 문자열을 모두 담아서 넘길 수 있게 바이너리 멀티파트 타입으로넘긴다. 
 		  fm.submit();
@@ -57,20 +58,20 @@ function check() {
 </header>
 
 <form name="frm">
-<input type="hidden" name ="bidx" value="<%=bv.getBidx()%>">
+<input type="hidden" name ="bidx" value="${bv.bidx}">
 <!-- Bidx값을 가져와서 수정할 게시글의 제목 내용 작성자 등이 나오게된다. -->
 	<table class="writeTable">
 		<tr>
 			<th>제목</th>
-			<td><input type="text" name="subject" value="<%=bv.getSubject() %>"></td>
+			<td><input type="text" name="subject" value="${bv.subject}"></td>
 		</tr>
 		<tr>
 			<th>내용</th>
-			<td><textarea name="contents" rows="6"><%=bv.getContents() %></textarea></td>
+			<td><textarea name="contents" rows="6">${bv.contents}</textarea></td>
 		</tr>
 		<tr>
 			<th>작성자</th>
-			<td><input type="text" name="writer" value="<%=bv.getWriter() %>"></td>
+			<td><input type="text" name="writer" value="${bv.writer}"></td>
 		</tr>
 		<tr>
 			<th>비밀번호</th>

@@ -1,21 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@page import="com.myaws.myapp.domain.*" %>
-
-<%
-BoardVo bv = (BoardVo)request.getAttribute("bv");
-CommentVo cv = (CommentVo)request.getAttribute("cv");
-//강제 형변환 양쪽형을 맞춰준다.
- String memberName = "";
-if(session.getAttribute("memberName") != null){
-	memberName = (String)session.getAttribute("memberName");
-} 
-int midx=0;
-if(session.getAttribute("midx") != null){
-	midx = Integer.parseInt(session.getAttribute("midx").toString());
-}
-
-%> 
+<%@ taglib prefix = "c" uri= "http://java.sun.com/jsp/jstl/core" %>
 
 
 <!DOCTYPE html>
@@ -25,7 +11,7 @@ if(session.getAttribute("midx") != null){
 <title>글내용</title>
 <script src="https://code.jquery.com/jquery-latest.min.js"></script> 
 <!-- mvc jquery-CDN주소 추가  -->
-<link href="<%=request.getContextPath() %>/resources/css/style2.css" rel="stylesheet">
+<link href="${pageContext.request.contextPath}/resources/css/style2.css" rel="stylesheet">
 <script> 
 
 function checkImageType(fileName) {
@@ -48,8 +34,8 @@ function getImageLink(fileName) {
 
 function download() {
 	// 주소 사이에 -s 는빼고
-	var downloadImage = getImageLink("<%=bv.getFilename()%>"); 
-	var downLink="<%=request.getContextPath() %>/board/displayFile.aws?fileName="+downloadImage+"&down=1";
+	var downloadImage = getImageLink("${bv.filename}"); 
+	var downLink="${pageContext.request.contextPath}/board/displayFile.aws?fileName="+downloadImage+"&down=1";
 	
 	return downLink;	
 }
@@ -60,7 +46,7 @@ function commentDel(cidx){
 		
 		$.ajax({
 			type :  "get",    //전송방식
-			url : "<%=request.getContextPath()%>/comment/"+cidx+"/commentDeleteAction.aws",
+			url : "${pageContext.request.contextPath}/comment/"+cidx+"/commentDeleteAction.aws",
 			dataType : "json",       // json타입은 문서에서  {"키값" : "value값","키값2":"value값2"}
 			success : function(result){   //결과가 넘어와서 성공했을 받는 영역
 			alert("전송성공 테스트");	
@@ -89,7 +75,7 @@ $.boardCommentList = function(){
   	
 	$.ajax({
 		type :  "get",    //전송방식
-		url : "<%=request.getContextPath()%>/comment/<%=bv.getBidx()%>/"+block+"/commentList.aws",
+		url : "${pageContext.request.contextPath}/comment/${bv.bidx}/"+block+"/commentList.aws",
 		dataType : "json",       // json타입은 문서에서  {"키값" : "value값","키값2":"value값2"}
 		success : function(result){   //결과가 넘어와서 성공했을 받는 영역
 		alert("전송성공 테스트");			
@@ -100,7 +86,7 @@ $.boardCommentList = function(){
 			
 			var btnn="";			
 			 //현재로그인 사람과 댓글쓴 사람의 번호가 같을때만 나타내준다
-			if (this.midx == "<%=midx%>") {
+			if (this.midx == "${midx}") {
 				if (this.delyn=="N"){
 					btnn= "<button type='button' onclick='commentDel("+this.cidx+");'>삭제</button>";
 				}			
@@ -144,7 +130,7 @@ $.boardCommentList = function(){
 
 $(document).ready(function(){	
 
-	$("#dUrl").html(getOriginalFileName("<%=bv.getFilename()%>"));
+	$("#dUrl").html(getOriginalFileName("${bv.filename}"));
 	
 	$("#dUrl").click(function(){
 		$("#dUrl").attr("href",download());	
@@ -159,7 +145,7 @@ $(document).ready(function(){
 	
 		$.ajax({
 			type :  "get",    //전송방식
-			url : "<%=request.getContextPath()%>/board/boardRecom.aws?bidx=<%=bv.getBidx()%>",
+			url : "${pageContext.request.contextPath}/board/boardRecom.aws?bidx=${bv.bidx}",
 			dataType : "json",       // json타입은 문서에서  {"키값" : "value값","키값2":"value값2"}
 			success : function(result){   //결과가 넘어와서 성공했을 받는 영역
 			//alert("전송성공 테스트");	
@@ -175,7 +161,7 @@ $(document).ready(function(){
 	
  	$("#cmtBtn").click(function(){
 		//alert("ddd");
-		let loginCheck = "<%=midx%>";
+		let loginCheck = "${midx}";
 		//alert(loginCheck);
 		if (loginCheck == "" || loginCheck == "null" || loginCheck == null || loginCheck == 0){
 			alert("로그인을 해주세요");
@@ -196,11 +182,11 @@ $(document).ready(function(){
 		
 		$.ajax({
 			type :  "post",    //전송방식
-			url : "<%=request.getContextPath()%>/comment/commentWriteAction.aws",
+			url : "${pageContext.request.contextPath}/comment/commentWriteAction.aws",
 			data : {"cwriter" : cwriter, 
 					   "ccontents" : ccontents, 
-					   "bidx" : "<%=bv.getBidx()%>",
-					   "midx" : "<%=midx%>"
+					   "bidx" : "${bv.bidx}",
+					   "midx" : "${midx}"
 					   },
 			dataType : "json",       // json타입은 문서에서  {"키값" : "value값","키값2":"value값2"}
 			success : function(result){   //결과가 넘어와서 성공했을 받는 영역
@@ -235,35 +221,32 @@ $(document).ready(function(){
 </header>
 
  <article class="detailContents">
-	<h2 class="contentTitle"><%=bv.getSubject() %> (조회수:<%=bv.getViewcnt() %>)</h2>
-	<input type = "button" id = "btn" value = "추천 : <%=bv.getRecom()%>">
-	<p class="write"><%=bv.getWriter() %> (<%=bv.getWriteday() %>)</p>
+	<h2 class="contentTitle">${bv.subject}(조회수:${bv.viewcnt})</h2>
+	<input type = "button" id = "btn" value = "추천 : ${bv.recom}">
+	<p class="write">${bv.writer} (${bv.writeday})</p>
 	<hr>
 	<div class="content">
-		<%=bv.getContents() %> 
+		${bv.contents} 
 	</div>
-	<% if (bv.getFilename() == null || bv.getFilename().equals("") ) {}else{ %>	
-	<img src="<%=request.getContextPath() %>/board/displayFile.aws?fileName=<%=bv.getFilename()%>">	
-	<p>
+	<c:if test="${!empty bv.filename}">
+	<img src="${pageContext.request.contextPath}/board/displayFile.aws?fileName=${bv.filename}">
+	</c:if>	
 	<a id="dUrl"  href="#"  class="fileDown">	
-	첨부파일 다운로드</a>
-	</p>		
-	<%} %>
-	
+	첨부파일 다운로드</a>		
 	
 </article>
 	
 <div class="btnBox">
-	<a class="btn aBtn" href="<%=request.getContextPath() %>/board/boardModify.aws?bidx=<%=bv.getBidx()%>">수정</a>
-	<a class="btn aBtn" href="<%=request.getContextPath() %>/board/boardDelete.aws?bidx=<%=bv.getBidx() %>">삭제</a>
-	<a class="btn aBtn" href="<%=request.getContextPath() %>/board/boardReply.aws?bidx=<%=bv.getBidx()%>">답변</a>
-	<a class="btn aBtn" href="<%=request.getContextPath() %>/board/boardList.aws">목록</a>
+	<a class="btn aBtn" href="${pageContext.request.contextPath}/board/boardModify.aws?bidx=${bv.bidx}">수정</a>
+	<a class="btn aBtn" href="${pageContext.request.contextPath}/board/boardDelete.aws?bidx=${bv.bidx}">삭제</a>
+	<a class="btn aBtn" href="${pageContext.request.contextPath}/board/boardReply.aws?bidx=${bv.bidx}">답변</a>
+	<a class="btn aBtn" href="${pageContext.request.contextPath}/board/boardList.aws">목록</a>
 </div>
 
 <article class="commentContents">
 	<form name="frm">
 		<p class="commentWriter">
-		<input type="text" id="cwriter" name="cwriter" value="<%=memberName %>"readonly="readonly" style="width:100px;">
+		<input type="text" id="cwriter" name="cwriter" value="${memberName}"readonly="readonly" style="width:100px;">
 		<!-- readonly 속성으로 읽기만 가능하게(수정불가) 만든다. --></p>	
 		<input type="text" id="ccontents" name="ccontents"> <!-- id값 부여 name sql 데이터와 일치 -->
 		<button type="button" id="cmtBtn" class="replyBtn">댓글쓰기</button> <!-- id값 부여 및 유효성 검사 함수 제거 -->

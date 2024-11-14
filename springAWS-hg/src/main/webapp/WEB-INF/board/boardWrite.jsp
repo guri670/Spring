@@ -2,24 +2,28 @@
     pageEncoding="UTF-8"%>
 <%-- <%@page include file="/common/loginCheck.jsp" %> --%>
 <%@page import = "com.myaws.myapp.domain.*"%>
+<%@ taglib prefix = "c" uri= "http://java.sun.com/jsp/jstl/core" %>
 <%
-String msg= "";
+/* String msg= "";
 if (request.getAttribute("msg") != null){
  msg = (String)request.getAttribute("msg");
 }
 
 if (msg !=""){
 out.println("<script>alert('"+msg+"');</script>");	
-}
+} */
 %>
     
+<c:if test="${!empty msg }">
+alert("");
+</c:if>
 <!DOCTYPE html>
 
 <html>
 <head>
 <meta charset="UTF-8">
 <title>글쓰기</title>
-<link href="<%=request.getContextPath() %>/resources/css/style2.css" type="text/css" rel="stylesheet">
+<link href="${pageContext.request.contextPath}/resources/css/style2.css" type="text/css" rel="stylesheet">
 <script> 
 
 function check() {
@@ -49,7 +53,7 @@ function check() {
 	  // 함수의 값은 참과 거짓 true & false로 나눈다.
 	  
 	  if (ans == true) {
-		  fm.action="<%=request.getContextPath()%>/board/boardWriteAction.aws";
+		  fm.action="${pageContext.request.contextPath}/board/boardWriteAction.aws";
 		  fm.method="post";
 		  fm.enctype="multipart/form-data"; // enctype
 		  fm.submit();
